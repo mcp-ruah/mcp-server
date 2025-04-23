@@ -4,7 +4,7 @@ WORKDIR /app
 # curl 설치
 RUN apt-get update && apt-get install -y curl
 
-# 전체 프로젝트 복사
+# 프로젝트 파일 복사
 COPY . .
 
 # uv 설치 (전역 설치 위치로 들어감)
@@ -16,17 +16,9 @@ ENV PATH="/root/.local/bin:${PATH}"
 # 가상환경 생성 및 프로젝트 설치
 RUN uv venv .venv && uv pip install -r pyproject.toml
 
-# # 필요한 포트 오픈
-# EXPOSE 8006
+# 필요한 포트 오픈
+EXPOSE 8007
 
-# # MCP 서버 실행
-# ENTRYPOINT ["uv", "run", "mcp", "run", "tools/weather.py:mcp"]
+# MCP 서버 실행
+ENTRYPOINT ["uv", "run", "mcp", "run", "youtube/youtube.py:mcp"]
 
-# 포트 설정
-ENV MCP_PORT=8006
-EXPOSE ${MCP_PORT}
-
-# ENV SERVER_TYPE=${SERVER_TYPE}   
-
-# sh -c를 사용하여 환경 변수 확장
-ENTRYPOINT ["sh", "-c", "uv run mcp run tools/${MCP_TOOL}:mcp"]

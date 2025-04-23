@@ -20,7 +20,10 @@ mcp = FastMCP("youtube_data")
 
 
 ### Tool 1 : 유튜브 영상 URL에 대한 자막을 가져옵니다.
-@mcp.tool()
+@mcp.tool(
+    name="get_youtube_transcript",
+    description="유튜브 영상 URL에 대한 자막을 가져옵니다.",
+)
 def get_youtube_transcript(url: str) -> str:
     """유튜브 영상 URL에 대한 자막을 가져옵니다."""
 
@@ -48,7 +51,10 @@ def get_youtube_transcript(url: str) -> str:
 
 
 ### Tool 2 : 유튜브에서 특정 키워드로 동영상을 검색하고 세부 정보를 가져옵니다
-@mcp.tool()
+@mcp.tool(
+    name="search_youtube_videos",
+    description="유튜브에서 특정 키워드로 동영상을 검색하고 세부 정보를 가져옵니다",
+)
 def search_youtube_videos(query: str):
     """유튜브에서 특정 키워드로 동영상을 검색하고 세부 정보를 가져옵니다"""
     try:
@@ -104,7 +110,10 @@ def search_youtube_videos(query: str):
 
 
 ### Tool 3 : YouTube 동영상 URL로부터 채널 정보와 최근 5개의 동영상을 가져옵니다
-@mcp.tool()
+@mcp.tool(
+    name="get_channel_info",
+    description="YouTube 동영상 URL로부터 채널 정보와 최근 5개의 동영상을 가져옵니다",
+)
 def get_channel_info(video_url: str) -> dict:
     """YouTube 동영상 URL로부터 채널 정보와 최근 5개의 동영상을 가져옵니다"""
 

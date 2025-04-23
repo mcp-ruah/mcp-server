@@ -17,16 +17,8 @@ ENV PATH="/root/.local/bin:${PATH}"
 RUN uv venv .venv && uv pip install -r pyproject.toml
 
 # # 필요한 포트 오픈
-# EXPOSE 8006
+EXPOSE 8006
 
 # # MCP 서버 실행
-# ENTRYPOINT ["uv", "run", "mcp", "run", "tools/weather.py:mcp"]
+ENTRYPOINT ["uv", "run", "mcp", "run", "weather/weather.py:mcp"]
 
-# 포트 설정
-ENV MCP_PORT=8006
-EXPOSE ${MCP_PORT}
-
-# ENV SERVER_TYPE=${SERVER_TYPE}   
-
-# sh -c를 사용하여 환경 변수 확장
-ENTRYPOINT ["sh", "-c", "uv run mcp run tools/${MCP_TOOL}:mcp"]

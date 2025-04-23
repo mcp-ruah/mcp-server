@@ -45,7 +45,7 @@ Instructions: {props.get('instruction', 'unknown')}
 
 
 # Implementing tool execution
-@mcp.tool()
+@mcp.tool(name="get_alerts", description="Get weather alerts for a US state.")
 async def get_alerts(state: str) -> str:
     """Get weather alerts for a US state.
 
@@ -65,7 +65,7 @@ async def get_alerts(state: str) -> str:
     return "\n===\n".join(alerts)
 
 
-@mcp.tool()
+@mcp.tool(name="get_forecast", description="Get weather forecast for a location")
 async def get_forecast(latitude: float, longitude: float) -> str:
     """Get weather forecast for a location
 
