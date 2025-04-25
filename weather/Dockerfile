@@ -21,4 +21,3 @@ EXPOSE 8006
 
 # # MCP 서버 실행
 ENTRYPOINT ["uv", "run", "mcp", "run", "weather/weather.py:mcp"]
-

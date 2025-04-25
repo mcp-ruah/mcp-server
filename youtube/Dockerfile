@@ -16,9 +16,9 @@ ENV PATH="/root/.local/bin:${PATH}"
 # 가상환경 생성 및 프로젝트 설치
 RUN uv venv .venv && uv pip install -r pyproject.toml
 
+
 # 필요한 포트 오픈
 EXPOSE 8007
 
 # MCP 서버 실행
 ENTRYPOINT ["uv", "run", "mcp", "run", "youtube/youtube.py:mcp"]
-

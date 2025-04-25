@@ -9,4 +9,9 @@ dependencies = [
     "httpx>=0.28.1",
     "mcp[cli]>=1.6.0",
     "youtube-transcript-api>=1.0.3",
+    "neo4j>=5.15.0",
 ]
+[project.entry-points."mcp"]
+youtube = "youtube.youtube:mcp"
+knowledge_graph = "memgraph.memgraph:mcp"
+weather = "weather.weather:mcp"

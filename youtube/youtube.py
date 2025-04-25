@@ -14,7 +14,7 @@ load_dotenv()
 YOUTUBE_API_KEY = os.getenv("YOUTUBE_API_KEY")
 YOUTUBE_API_URL = "https://www.googleapis.com/youtube/v3"
 
-
+print(YOUTUBE_API_KEY)
 # Create an MCP server
 mcp = FastMCP("youtube_data")
 

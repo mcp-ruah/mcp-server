@@ -6,7 +6,7 @@ uv init --python 3.13 // 원하는 버전
 uv venv 	// .venv 가상환경 설치
 
 // Window
-./.venv/Scripts/activate
+./.venv/Scripts/activate 
 
 // MacOS
 source .venv/bin/activate 
@@ -20,9 +20,21 @@ uv pip install -e .
 ```
 //docker build 
 docker image build -t (도커이미지이름) -f (폴더명)/Dockerfile .
+docker image build -t mcp/youtube -f youtube/Dockerfile .
+docker image build -t mcp/weather -f weather/Dockerfile .
+docker image build -t mcp/knowledge_graph -f memgraph/Dockerfile .
 
 // docker execution(mcp서버가 알아서 실행하기때문에 안해도됨)
 docker run -p 8006:8006 -i --rm mcp/weather
+
+//docker container stop
+docker ps   //빌드된 컨테이너 목록
+docker stop (container ID or name)
+
+
+//docker image delete
+docker images // 빌드된 이미지 목록
+docker rmi (REPOSITORY)
 ```
 
 
