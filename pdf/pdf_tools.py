@@ -11,7 +11,11 @@ import sys
 
 # 환경 변수 로드 & OpenAI 클라이언트 초기화
 load_dotenv()
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+try:
+    client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+except Exception as e:
+    print(f"OpenAI 클라이언트 초기화 오류: {e}")
+    sys.exit(1)
 
 # MCP 서버 인스턴스 생성
 mcp = FastMCP("pdf_data")
@@ -20,6 +24,7 @@ def maybe_correct_inversion(image: Image.Image, invert_percentile: float = 40) -
     """
     이미지 밝기 분포의 invert_percentile 백분위가 128 미만이면 반전합니다.
     """
+
     if image.mode not in ("RGB", "L"):
         image = image.convert("RGB")
     gray = image.convert("L")
@@ -94,42 +99,51 @@ def preprocess_pdfs(
     """
     data = []
     processed = set()
-    if os.path.exists(preprocessed_json_path):
-        try:
-            with open(preprocessed_json_path, 'r', encoding='utf-8') as f:
-                data = json.load(f)
-                processed = {e['pdf_path'] for e in data}
-        except json.JSONDecodeError:
-            data = []
+    try:
+        if os.path.exists(preprocessed_json_path):
+            try:
+                with open(preprocessed_json_path, "r", encoding="utf-8") as f:
+                    data = json.load(f)
+                    processed = {e["pdf_path"] for e in data}
+            except json.JSONDecodeError:
+                data = []
 
-    for dirpath, _, filenames in os.walk(root_folder):
-        # 상대 경로 파트를 얻어 각 부분 strip 처리
-        rel = os.path.relpath(dirpath, root_folder)
-        safe_parts = [part.strip() for part in rel.split(os.sep) if part.strip()]
-        safe_rel = os.path.join(*safe_parts) if safe_parts else ''
+        for dirpath, _, filenames in os.walk(root_folder):
+            # 상대 경로 파트를 얻어 각 부분 strip 처리
+            rel = os.path.relpath(dirpath, root_folder)
+            safe_parts = [part.strip() for part in rel.split(os.sep) if part.strip()]
+            safe_rel = os.path.join(*safe_parts) if safe_parts else ""
 
-        for fn in filenames:
-            if not fn.lower().endswith('.pdf'):
-                continue
-            pdf_path = os.path.join(dirpath, fn)
-            if pdf_path in processed:
-                continue
+            for fn in filenames:
+                if not fn.lower().endswith(".pdf"):
+                    continue
+                pdf_path = os.path.join(dirpath, fn)
+                if pdf_path in processed:
+                    continue
 
-            # 출력 디렉토리 경로
-            out_dir = os.path.join(output_images_folder, safe_rel, Path(fn).stem.strip())
-            recs = extract_primary_and_fullpage_images_from_pdf(
-                pdf_path, out_dir, invert_percentile
-            )
-            data.append({
-                "pdf_path": pdf_path,
-                "pdf_base": Path(fn).stem.strip(),
-                "records": recs
-            })
+                # 출력 디렉토리 경로
+                out_dir = os.path.join(
+                    output_images_folder, safe_rel, Path(fn).stem.strip()
+                )
+                recs = extract_primary_and_fullpage_images_from_pdf(
+                    pdf_path, out_dir, invert_percentile
+                )
+                data.append(
+                    {
+                        "pdf_path": pdf_path,
+                        "pdf_base": Path(fn).stem.strip(),
+                        "records": recs,
+                    }
+                )
 
-    with open(preprocessed_json_path, 'w', encoding='utf-8') as f:
-        json.dump(data, f, ensure_ascii=False, indent=2)
+        with open(preprocessed_json_path, "w", encoding="utf-8") as f:
+            json.dump(data, f, ensure_ascii=False, indent=2)
 
-    return f"전처리 완료: {preprocessed_json_path}"
+        return f"전처리 완료: {preprocessed_json_path}"
+    except Exception as e:
+        error_msg = f"오류 발생: {str(e)}"
+        print(error_msg)  # 서버 로그에 출력
+        return error_msg  # 클라이언트에 전달
 
 
 def compute_file_hash(file_path: str, hash_algo: str = 'md5') -> str:

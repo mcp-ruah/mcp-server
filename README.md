@@ -23,6 +23,7 @@ docker image build -t (도커이미지이름) -f (폴더명)/Dockerfile .
 docker image build -t mcp/youtube -f youtube/Dockerfile .
 docker image build -t mcp/weather -f weather/Dockerfile .
 docker image build -t mcp/knowledge_graph -f memgraph/Dockerfile .
+docker image build -t mcp/pdf_tools -f pdf/Dockerfile .
 
 // docker execution(mcp서버가 알아서 실행하기때문에 안해도됨)
 docker run -p 8006:8006 -i --rm mcp/weather
@@ -57,3 +58,56 @@ docker stop 6784f3bbb400
 docker stop zen_liskov
 ```
 
+### desktop-commander setting
+#### install
+```
+//
+npx @wonderwhy-er/desktop-commander@latest setup
+```
+
+```
+notepad "$env:USERPROFILE\.claude-server-commander\config.json"
+```
+```
+{
+  "blockedCommands": [
+    "mkfs",
+    "format",
+    "mount",
+    "umount",
+    "fdisk",
+    "dd",
+    "parted",
+    "diskpart",
+    "sudo",
+    "su",
+    "passwd",
+    "adduser",
+    "useradd",
+    "usermod",
+    "groupadd",
+    "chsh",
+    "visudo",
+    "shutdown",
+    "reboot",
+    "halt",
+    "poweroff",
+    "init",
+    "iptables",
+    "firewall",
+    "netsh",
+    "sfc",
+    "bcdedit",
+    "reg",
+    "net",
+    "sc",
+    "runas",
+    "cipher",
+    "takeown"
+  ],
+  "defaultShell": "powershell.exe",
+  "allowedDirectories": [
+    "작업경로"
+  ]
+}
+```
